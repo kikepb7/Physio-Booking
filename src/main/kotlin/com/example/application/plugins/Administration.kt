@@ -1,4 +1,4 @@
-package com.example.plugins
+package com.example.application.plugins
 
 import com.mongodb.kotlin.client.coroutine.MongoClient
 import dev.inmo.krontab.builder.*

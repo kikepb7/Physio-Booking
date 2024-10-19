@@ -1,4 +1,4 @@
-package com.example.plugins
+package com.example.application.plugins
 
 import com.github.mustachejava.DefaultMustacheFactory
 import io.ktor.server.application.*

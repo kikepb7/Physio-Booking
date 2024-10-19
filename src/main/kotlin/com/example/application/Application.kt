@@ -1,6 +1,6 @@
-package com.example
+package com.example.application
 
-import com.example.plugins.*
+import com.example.application.plugins.*
 import io.ktor.server.application.*
 
 fun main(args: Array<String>) {
@@ -11,7 +11,6 @@ fun Application.module() {
     configureAdministration()
     configureSockets()
     configureSerialization()
-    configureDatabases()
     configureTemplating()
     configureMonitoring()
     configureHTTP()
