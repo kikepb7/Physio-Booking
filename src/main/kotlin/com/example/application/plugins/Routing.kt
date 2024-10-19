@@ -13,5 +13,4 @@ fun Application.configureRouting() {
 
     val db = DbConnection.getDatabaseInstance()
 
-
 }

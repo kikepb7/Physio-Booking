@@ -7,7 +7,7 @@ object DbConnection {
     private val db: Database ?= null
     private val hostname = System.getenv("DB_HOST")?: "127.0.0.1"
     private val databaseName = System.getenv("DB_NAME")?: "physio_booking"
-    private val driver = "com.mysql.cj.jdbc.Driver"
+    private const val driver = "com.mysql.cj.jdbc.Driver"
     private val user = System.getenv("DB_USER")?: "root"
     private val password = System.getenv("DB_PASSWORD")?: ""
     private val jdbcUrl = "jdbc:mysql://$hostname:3306/$databaseName"
