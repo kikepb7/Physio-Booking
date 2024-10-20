@@ -40,7 +40,7 @@ fun Route.signUp(
             password = saltedHash.hash,
             salt = saltedHash.salt
         )
-        val wasAcknowledged = userRepositoryImpl.insertUser(user = user)
+        val wasAcknowledged = userRepositoryImpl.insertUserMongoDb(user = user)
         if (!wasAcknowledged) {
             call.respond(HttpStatusCode.Conflict)
             return@post
@@ -62,7 +62,7 @@ fun Route.signIn(
             return@post
         }
 
-        val user = userRepositoryImpl.getUserByUsername(username = request.username)
+        val user = userRepositoryImpl.getUserByUsernameMongoDb(username = request.username)
         if (user == null) {
             call.respond(status = HttpStatusCode.Conflict, message = "Incorrect username or password")
             return@post
