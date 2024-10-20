@@ -2,9 +2,8 @@ package com.example.application.plugins
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.kborowy.authprovider.firebase.firebase
+import com.example.security.token.TokenConfig
 import io.ktor.client.*
-import io.ktor.client.engine.apache.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -14,66 +13,21 @@ import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import java.io.File
 
-fun Application.configureSecurity() {
-    install(Authentication) {
-        firebase {
-            adminFile = File("path/to/admin/file.json")
-            realm = "My Server"
-            validate { token ->
-                MyAuthenticatedUser(id = token.uid)
-            }
-        }
-    }
-    authentication {
-            oauth("auth-oauth-google") {
-                urlProvider = { "http://localhost:8080/callback" }
-                providerLookup = {
-                    OAuthServerSettings.OAuth2ServerSettings(
-                        name = "google",
-                        authorizeUrl = "https://accounts.google.com/o/oauth2/auth",
-                        accessTokenUrl = "https://accounts.google.com/o/oauth2/token",
-                        requestMethod = HttpMethod.Post,
-                        clientId = System.getenv("GOOGLE_CLIENT_ID"),
-                        clientSecret = System.getenv("GOOGLE_CLIENT_SECRET"),
-                        defaultScopes = listOf("https://www.googleapis.com/auth/userinfo.profile")
-                    )
-                }
-                client = HttpClient(Apache)
-            }
-        }
-    // Please read the jwt property from the config file if you are using EngineMain
-    val jwtAudience = "jwt-audience"
-    val jwtDomain = "https://jwt-provider-domain/"
-    val jwtRealm = "ktor sample app"
-    val jwtSecret = "secret"
+fun Application.configureSecurity(config: TokenConfig) {
+
     authentication {
         jwt {
-            realm = jwtRealm
+            realm = this@configureSecurity.environment.config.property("jwt.realm").getString()
             verifier(
                 JWT
-                    .require(Algorithm.HMAC256(jwtSecret))
-                    .withAudience(jwtAudience)
-                    .withIssuer(jwtDomain)
+                    .require(Algorithm.HMAC256(config.secret))
+                    .withAnyOfAudience(config.audience)
+                    .withIssuer(config.issuer)
                     .build()
             )
             validate { credential ->
-                if (credential.payload.audience.contains(jwtAudience)) JWTPrincipal(credential.payload) else null
+                if (credential.payload.audience.contains(config.audience)) JWTPrincipal(credential.payload) else null
             }
         }
     }
-    routing {
-        authenticate("auth-oauth-google") {
-                    get("login") {
-                        call.respondRedirect("/callback")
-                    }
-        
-                    get("/callback") {
-                        val principal: OAuthAccessTokenResponse.OAuth2? = call.authentication.principal()
-                        call.sessions.set(UserSession(principal?.accessToken.toString()))
-                        call.respondRedirect("/hello")
-                    }
-                }
-    }
 }
-
-class UserSession(accessToken: String)

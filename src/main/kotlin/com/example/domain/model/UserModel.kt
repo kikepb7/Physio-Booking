@@ -11,5 +11,7 @@ data class UserModel(
     val password: String? = null,
     val phone: String? = null,
     val apikey: String? = null,
-    val profileImage: String? = null
+    val profileImage: String? = null,
+    val role: String? = null,
+    val username: String? = null
 )

@@ -14,4 +14,6 @@ object User: IntIdTable(name = TABLE_NAME) {
     val apikey = text(name = "apikey").uniqueIndex()
     val registerDate = datetime(name = "register_time")
     val profileImage = text(name = "profile_image").nullable()
+    val role = varchar(name = "role", length = 20).uniqueIndex().nullable()
+    val username = varchar(name = "username", length = 50).uniqueIndex().nullable()
 }

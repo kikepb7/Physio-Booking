@@ -16,7 +16,9 @@ fun userToDomain(row: ResultRow): UserModel = UserModel(
     password = row[User.password],
     phone = row[User.phone],
     apikey = row[User.apikey],
-    profileImage = row[User.profileImage]
+    profileImage = row[User.profileImage],
+    role = row[User.role],
+    username = row[User.username]
 )
 
 fun physiotherapistToDomain(row: ResultRow): PhysiotherapistModel = PhysiotherapistModel(

@@ -1,14 +1,12 @@
-
 val kotlin_version: String by project
 val logback_version: String by project
-val flaxoos_extra_plugins_version: String by project
 val exposed_version: String by project
 val h2_version: String by project
 
 plugins {
-    kotlin("jvm") version "2.0.21"
-    id("io.ktor.plugin") version "3.0.0"
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21"
+    kotlin("jvm") version "2.0.0"
+    id("io.ktor.plugin") version "2.3.11"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.0"
 }
 
 group = "com.example"
@@ -23,19 +21,23 @@ application {
 
 repositories {
     mavenCentral()
-    maven { url = uri("https://packages.confluent.io/maven/") }
 }
 
 dependencies {
+    val ktormVersion = "4.0.0"
+    val ktorVersion = "2.3.11"
+    val tomcatVersion = "2.3.11"
+    val kmongoVersion = "4.8.0"
+    val hexVersion = "1.17.1"
+
+    implementation("io.ktor:ktor-server-call-logging-jvm")
     implementation("io.ktor:ktor-server-core-jvm")
-    implementation("io.ktor:ktor-server-resources-jvm")
-    implementation("io.github.flaxoos:ktor-server-task-scheduling-core-jvm:$flaxoos_extra_plugins_version")
-    implementation("io.github.flaxoos:ktor-server-task-scheduling-redis-jvm:$flaxoos_extra_plugins_version")
-    implementation("io.github.flaxoos:ktor-server-task-scheduling-mongodb-jvm:$flaxoos_extra_plugins_version")
-    implementation("io.github.flaxoos:ktor-server-task-scheduling-jdbc-jvm:$flaxoos_extra_plugins_version")
-    implementation("io.ktor:ktor-server-websockets-jvm")
+    implementation("io.ktor:ktor-server-host-common-jvm")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
+    implementation("org.ktorm:ktorm-core:$ktormVersion")
+    implementation("io.ktor:ktor-server-tomcat-jvm:$tomcatVersion")
+    implementation("mysql:mysql-connector-java:8.0.33")
 
     // Exposed
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
@@ -43,21 +45,24 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jodatime:$exposed_version")
 
+    // Status pages
+    implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
+
+    // Mongo DB
+    implementation("org.litote.kmongo:kmongo-coroutine:$kmongoVersion")
+
+    // Hash
+    implementation("commons-codec:commons-codec:$hexVersion")
+
     implementation("com.h2database:h2:$h2_version")
+    implementation("io.ktor:ktor-server-thymeleaf-jvm")
     implementation("io.ktor:ktor-server-mustache-jvm")
     implementation("io.ktor:ktor-serialization-gson-jvm")
-    implementation("io.ktor:ktor-server-call-logging-jvm")
-    implementation("io.ktor:ktor-server-swagger-jvm")
     implementation("io.ktor:ktor-server-cors-jvm")
-    implementation("io.ktor:ktor-server-http-redirect-jvm")
     implementation("io.ktor:ktor-server-auth-jvm")
-    implementation("com.kborowy:firebase-auth-provider:1+")
-    implementation("io.ktor:ktor-client-core-jvm")
-    implementation("io.ktor:ktor-client-apache-jvm")
     implementation("io.ktor:ktor-server-auth-jwt-jvm")
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("io.ktor:ktor-server-config-yaml")
-    testImplementation("io.ktor:ktor-server-test-host-jvm")
+    testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
