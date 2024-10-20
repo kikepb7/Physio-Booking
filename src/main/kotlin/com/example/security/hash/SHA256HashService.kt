@@ -7,8 +7,8 @@ import java.security.SecureRandom
 class SHA256HashService: HashService {
     override fun generateSaltedHash(value: String, saltLength: Int): SaltedHash {
         val salt = SecureRandom.getInstance("SHA1PRNG").generateSeed(saltLength)
-        val hash = DigestUtils.sha256Hex("$salt$value")
         val saltAsHex = Hex.encodeHexString(salt)
+        val hash = DigestUtils.sha256Hex("$saltAsHex$value")
 
         return SaltedHash(
             hash = hash,
