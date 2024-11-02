@@ -2,6 +2,7 @@ val kotlin_version: String by project
 val logback_version: String by project
 val exposed_version: String by project
 val h2_version: String by project
+val koinVersion: String by project
 
 plugins {
     kotlin("jvm") version "2.0.0"
@@ -53,6 +54,11 @@ dependencies {
 
     // Hash
     implementation("commons-codec:commons-codec:$hexVersion")
+
+    // Koin
+    implementation("io.insert-koin:koin-ktor:$koinVersion")
+    // SLF4J Logger
+    implementation("io.insert-koin:koin-logger-slf4j:$koinVersion")
 
     implementation("com.h2database:h2:$h2_version")
     implementation("io.ktor:ktor-server-thymeleaf-jvm")
